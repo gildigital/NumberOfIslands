@@ -1,4 +1,5 @@
-package HomeCalc;
+package NumberOfIslands;
+
 import java.util.Random;
 
 public class GridGenerator {

@@ -1,40 +1,27 @@
-package HomeCalc;
+package NumberOfIslands;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Stack;
 
 public class NumberOfIslandsVisualization extends JFrame {
-    // Grid dimensions
-    private static final int ROWS = 20; // Number of rows
-    private static final int COLS = 20; // Number of columns
+    private static final int ROWS = 20;
+    private static final int COLS = 20;
     private static final int CELL_SIZE = 40; // Pixel size of each cell
 
-    // Colors
     private static final Color LAND_COLOR = Color.GREEN;
     private static final Color WATER_COLOR = Color.BLUE;
     private static final Color VISITED_COLOR = Color.YELLOW;
 
-    // The grid (0 = water, 1 = land), dynamically generated
-    private int[][] grid;
+    private int[][] grid; // The grid (0 = water, 1 = land), dynamically generated
+    private boolean[][] visited; // Visited array to track DFS progress
+    private Stack<int[]> dfsStack = new Stack<>(); // Stack for DFS simulation
 
-    // Visited array to track DFS progress
-    private boolean[][] visited;
-
-    // Stack for DFS simulation
-    private Stack<int[]> dfsStack = new Stack<>();
-
-    // Framerate control
-    private static final int FRAME_DELAY = 10; // Milliseconds between frames
-
-    // Paths to sound files
+    private static final int FRAME_DELAY = 30; // Milliseconds between frames
     private static final String BOOP_SOUND = "src/Utilities/boop.wav"; // Sound for land
     private static final String DING_SOUND = "src/Utilities/ding.wav"; // Sound for island
 
-    // Grid panel
     private GridPanel gridPanel;
-
-    // Island counter
     private int islandCounter = 0;
 
     public NumberOfIslandsVisualization() {
@@ -43,22 +30,17 @@ public class NumberOfIslandsVisualization extends JFrame {
         setSize(COLS * CELL_SIZE + 16, ROWS * CELL_SIZE + 39); // Account for window borders
         setLocationRelativeTo(null);
 
-        // Generate the grid dynamically
         grid = GridGenerator.generateGrid(ROWS, COLS);
 
-        // Print the grid to the console for debugging
         System.out.println("Generated Grid:");
         GridGenerator.printGrid(grid);
 
-        // Initialize visited array
         visited = new boolean[ROWS][COLS];
 
-        // Initialize grid panel
         gridPanel = new GridPanel();
         add(gridPanel);
 
-        // Start the DFS simulation
-        new Thread(this::startSimulation).start();
+        new Thread(this::startSimulation).start(); // Start the DFS simulation
     }
 
     private void startSimulation() {
